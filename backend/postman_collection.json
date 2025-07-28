@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "a8a0c1d7-c2a1-4a33-8a7b-7e5f6d4f3e2b",
+		"name": "Bigscreen Survey API",
+		"description": "Collection Postman pour l'API Bigscreen Survey.\n\n**Utilisation :**\n1. Lancez votre application Laravel (`php artisan serve`).\n2. Utilisez la requête **Auth > Login** avec les bons identifiants.\n3. Copiez le `access_token` de la réponse.\n4. Collez-le dans la variable `admin_token` de la collection.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@bigscreen.com\",\n    \"password\": \"admin1234\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// Stocke automatiquement le token dans la variable de collection admin_token",
+									"let jsonData = pm.response.json();",
+									"if (jsonData.access_token) {",
+									"    pm.collectionVariables.set(\"admin_token\", jsonData.access_token);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "logout"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/refresh",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "refresh"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "me"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "List Surveys",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/admin/surveys", "host": ["{{baseUrl}}"], "path": ["admin", "surveys"]}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Survey",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "POST",
+						"header": [],
+						"body": {"mode": "raw", "raw": "{\n    \"title\": \"Nouveau sondage client\",\n    \"description\": \"Un sondage pour recueillir les avis.\",\n    \"is_active\": true\n}", "options": {"raw": {"language": "json"}}},
+						"url": {"raw": "{{baseUrl}}/admin/surveys", "host": ["{{baseUrl}}"], "path": ["admin", "surveys"]}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Survey",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/admin/surveys/:survey", "host": ["{{baseUrl}}"], "path": ["admin", "surveys", ":survey"]}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Survey",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "PUT",
+						"header": [],
+						"body": {"mode": "raw", "raw": "{\n    \"title\": \"Sondage client modifié\",\n    \"is_active\": false\n}", "options": {"raw": {"language": "json"}}},
+						"url": {"raw": "{{baseUrl}}/admin/surveys/:survey", "host": ["{{baseUrl}}"], "path": ["admin", "surveys", ":survey"]}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Survey",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "DELETE",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/admin/surveys/:survey", "host": ["{{baseUrl}}"], "path": ["admin", "surveys", ":survey"]}
+					},
+					"response": []
+				},
+				{
+					"name": "List Questions",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/admin/surveys/:survey/questions", "host": ["{{baseUrl}}"], "path": ["admin", "surveys", ":survey", "questions"]}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Question",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "POST",
+						"header": [],
+						"body": {"mode": "raw", "raw": "{\n    \"question_number\": 1,\n    \"question_text\": \"Comment évaluez-vous notre service ?\",\n    \"question_type\": \"C\"\n}", "options": {"raw": {"language": "json"}}},
+						"url": {"raw": "{{baseUrl}}/admin/surveys/:survey/questions", "host": ["{{baseUrl}}"], "path": ["admin", "surveys", ":survey", "questions"]}
+					},
+					"response": []
+				},
+				{
+					"name": "Dashboard",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_token}}", "type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/admin/dashboard", "host": ["{{baseUrl}}"], "path": ["admin", "dashboard"]}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Public",
+			"item": [
+				{
+					"name": "List Active Surveys",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {"raw": "{{baseUrl}}/surveys", "host": ["{{baseUrl}}"], "path": ["surveys"]}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Response",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {"mode": "raw", "raw": "{\n    \"email\": \"respondent@example.com\",\n    \"answers\": [\n        {\n            \"question_id\": 1,\n            \"answer_numeric\": 5\n        },\n        {\n            \"question_id\": 2,\n            \"answer_text\": \"Le service était excellent !\"\n        }\n    ]\n}", "options": {"raw": {"language": "json"}}},
+						"url": {"raw": "{{baseUrl}}/surveys/:survey/responses", "host": ["{{baseUrl}}"], "path": ["surveys", ":survey", "responses"]}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{"key": "baseUrl", "value": "http://127.0.0.1:8000/api"},
+		{"key": "admin_token", "value": ""}
+	]
+}
