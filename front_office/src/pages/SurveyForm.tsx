@@ -97,7 +97,7 @@ const SurveyForm: React.FC = () => {
         const answerValue = responses[q.id];
         
         // Préparation de la réponse selon le type de question
-        let answerPayload: any = {
+        const answerPayload: any = {
           question_id: q.id,
           answer_text: null,
           answer_numeric: null,

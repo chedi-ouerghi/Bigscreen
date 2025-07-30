@@ -104,4 +104,25 @@ Variables principales à définir dans `.env` :
 
 MIT
 
+## test unitaire 
+
+
+   PASS  Tests\Unit\Services\ResponseServiceTest
+  ✓ create response stores survey response with answers                                       0.38s  
+  ✓ create response with empty answers                                                        0.03s  
+
+   PASS  Tests\Unit\Services\StatisticsServiceTest
+  ✓ get dashboard stats returns correct counts                                                0.03s  
+  ✓ get dashboard stats returns zero counts when no data                                      0.01s  
+
+   PASS  Tests\Unit\Services\SurveyServiceTest
+  ✓ get active surveys returns only active surveys                                            0.02s  
+  ✓ get active surveys returns empty collection when no active surveys                        0.02s  
+
+   PASS  Tests\Unit\Services\TokenServiceTest
+  ✓ generate returns valid uuid                                                               0.02s  
+  ✓ generate returns unique tokens
+
+  Tests:    8 passed (23 assertions)
+  Duration: 0.74s
 
