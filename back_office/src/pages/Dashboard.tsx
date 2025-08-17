@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { adminService } from '@/services/api';
-import { HelpCircle, MessageSquare, TrendingUp, Users } from 'lucide-react';
+import { HelpCircle, TrendingUp, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import {
   Cell,
@@ -137,22 +137,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-orange-700 dark:text-orange-300">
-              Temps moyen
-            </CardTitle>
-            <MessageSquare className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-800 dark:text-orange-200">
-              {stats.averageTime ?? '-'}
-            </div>
-            <p className="text-xs text-orange-600 dark:text-orange-400">
-              Par réponse
-            </p>
-          </CardContent>
-        </Card>
+      
       </div>
 
       {/* Charts Grid */}
