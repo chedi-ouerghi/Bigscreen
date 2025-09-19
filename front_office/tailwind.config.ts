@@ -150,9 +150,14 @@ export default {
 				'slide-out-left': 'slide-out-left 0.3s ease-out',
 				'bounce-in': 'bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
 				'checkmark': 'checkmark 0.5s ease-out',
-				'progress': 'progress 0.3s ease-out'
+				'progress': 'progress 0.3s ease-out',
+				        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-medium': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
 			}
-		}
+		},
+		backdropBlur: {
+        xs: '2px',
+      }
+
 	},
-	plugins: [require("tailwindcss-animate")],
 } satisfies Config;

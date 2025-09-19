@@ -1,5 +1,6 @@
 import { ArrowLeft, FileText } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useLoader } from '@/components/loaderCore';
 import { useParams } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
@@ -10,7 +11,7 @@ interface AnsweredQuestion {
   question_type: string;
   answer_text: string | null;
   answer_numeric: number | null;
-  answer_json: any;
+  answer_json: unknown;
 }
 
 const ResultPage: React.FC = () => {
@@ -21,10 +22,13 @@ const ResultPage: React.FC = () => {
   const [completedAt, setCompletedAt] = useState<string | null>(null);
   const [questions, setQuestions] = useState<AnsweredQuestion[]>([]);
 
+  const { showLoader, hideLoader } = useLoader();
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
+      showLoader(10);
       try {
         if (!token) {
           setError("Token manquant ou invalide.");
@@ -35,18 +39,28 @@ const ResultPage: React.FC = () => {
         setSurveyTitle(data.survey_title);
         setCompletedAt(data.completed_at);
         setQuestions(data.questions);
-      } catch (e: any) {
-        setError(e?.response?.data?.message || "Aucune réponse trouvée pour ce token.");
+      } catch (e) {
+        // attempt to extract message safely without using `any`
+        let message = "Aucune réponse trouvée pour ce token.";
+        if (e && typeof e === 'object') {
+          const resp = (e as Record<string, unknown>)['response'];
+          if (resp && typeof resp === 'object') {
+            const data = (resp as Record<string, unknown>)['data'];
+            if (data && typeof data === 'object') {
+              const msg = (data as Record<string, unknown>)['message'];
+              if (typeof msg === 'string') message = msg;
+            }
+          }
+        }
+        setError(message);
       } finally {
+        hideLoader();
         setLoading(false);
       }
     };
     fetchData();
-  }, [token]);
-
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
-  }
+  }, [token, showLoader, hideLoader]);
+  // don't render legacy "Chargement..." placeholder while global loader is active
 
   if (error) {
     return (

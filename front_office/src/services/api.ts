@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000/api'; // À adapter selon l'environnement
+const API_BASE = 'http://localhost:8000/api';
 
 export const fetchSurveys = async () => {
   const { data } = await axios.get(`${API_BASE}/surveys`);

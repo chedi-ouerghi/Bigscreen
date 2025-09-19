@@ -85,7 +85,7 @@ const QuestionStep: React.FC<QuestionStepProps> = ({
         }
         break;
 
-      case 'C': // Type C (échelle numérique)
+      case 'C': { // Type C (échelle numérique)
         const numValue = Number(value);
         if (question.validation_rules?.minValue !== undefined && numValue < question.validation_rules.minValue) {
           setError(`La valeur minimale est ${question.validation_rules.minValue}`);
@@ -96,6 +96,7 @@ const QuestionStep: React.FC<QuestionStepProps> = ({
           return false;
         }
         break;
+      }
     }
 
     setError('');

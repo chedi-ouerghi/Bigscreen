@@ -142,3 +142,12 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* small helpers to preserve overflow and layering */
+.hero-image-container { overflow: visible; }
+
+/* responsive adjustments: on small screens place the floating cards below the image */
+@media (max-width: 768px) {
+  .absolute.top-8.left-6 { position: static !important; transform: none !important; margin-top: 12px; }
+  .absolute.right-6.bottom-6 { position: static !important; transform: none !important; margin-top: 12px; }
+}

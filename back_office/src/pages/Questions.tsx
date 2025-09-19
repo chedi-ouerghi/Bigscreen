@@ -256,11 +256,9 @@ export default function Questions() {
               <TableHeader>
                 <TableRow className="bg-slate-50 dark:bg-slate-800/50">
                   <TableHead className="w-20 font-semibold">No.</TableHead>
-                  <TableHead className="font-semibold">Sondage</TableHead>
                   <TableHead className="font-semibold">Texte</TableHead>
                   <TableHead className="w-32 font-semibold">Type</TableHead>
                   <TableHead className="w-40 font-semibold">Options</TableHead>
-                  <TableHead className="w-40 font-semibold">Règles</TableHead>
                   <TableHead className="w-24 font-semibold">Obligatoire</TableHead>
                   <TableHead className="w-40 font-semibold">Créé le</TableHead>
                   <TableHead className="w-40 font-semibold">MAJ</TableHead>
@@ -268,8 +266,6 @@ export default function Questions() {
               </TableHeader>
               <TableBody>
                 {filteredQuestions.map((question) => {
-                  // Trouver le titre du survey pour cette question
-                  const survey = surveys.find(s => s.id === question.survey_id);
                   return (
                     <TableRow 
                       key={question.id}
@@ -277,9 +273,6 @@ export default function Questions() {
                     >
                       <TableCell className="font-medium text-slate-900 dark:text-slate-100">
                         #{question.question_number}
-                      </TableCell>
-                      <TableCell className="text-slate-700 dark:text-slate-300">
-                        {survey ? survey.title : '—'}
                       </TableCell>
                       <TableCell className="text-slate-700 dark:text-slate-300">
                         {question.question_text}
@@ -295,9 +288,7 @@ export default function Questions() {
                       <TableCell className="text-slate-600 dark:text-slate-400">
                         {question.options ? (typeof question.options === 'string' ? question.options : JSON.stringify(question.options)) : '-'}
                       </TableCell>
-                      <TableCell className="text-slate-600 dark:text-slate-400">
-                        {question.validation_rules ? (typeof question.validation_rules === 'string' ? question.validation_rules : JSON.stringify(question.validation_rules)) : '-'}
-                      </TableCell>
+                  
                       <TableCell>
                         <Badge 
                           variant={question.is_required ? "destructive" : "secondary"}

@@ -188,29 +188,40 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={400}>
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis />
-                <Radar
-                  name="Période actuelle"
-                  dataKey="A"
-                  stroke="#3B82F6"
-                  fill="#3B82F6"
-                  fillOpacity={0.3}
-                />
-                <Radar
-                  name="Période précédente"
-                  dataKey="B"
-                  stroke="#8B5CF6"
-                  fill="#8B5CF6"
-                  fillOpacity={0.3}
-                />
-                <Legend />
-                <Tooltip />
-              </RadarChart>
-            </ResponsiveContainer>
+        <ResponsiveContainer width="100%" height={400}>
+  <RadarChart 
+    cx="50%" 
+    cy="50%" 
+    outerRadius="75%" 
+    data={radarData}
+    margin={{ top: 40, right: 40, bottom: 40, left: 40 }} // <-- ajoute du padding
+  >
+    <PolarGrid />
+    <PolarAngleAxis 
+      dataKey="subject" 
+      tick={{ fontSize: 12, fill: "#334155" }} // style du texte
+      tickMargin={15} // espace entre le label et le radar
+    />
+    <PolarRadiusAxis />
+    <Radar
+      name="Période actuelle"
+      dataKey="A"
+      stroke="#3B82F6"
+      fill="#3B82F6"
+      fillOpacity={0.3}
+    />
+    <Radar
+      name="Période précédente"
+      dataKey="B"
+      stroke="#8B5CF6"
+      fill="#8B5CF6"
+      fillOpacity={0.3}
+    />
+    <Legend />
+    <Tooltip />
+  </RadarChart>
+</ResponsiveContainer>
+
           </CardContent>
         </Card>
       </div>

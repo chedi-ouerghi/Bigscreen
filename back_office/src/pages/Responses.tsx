@@ -36,12 +36,15 @@ interface Response {
 }
 
 interface Answer {
-  question_number: number;
-  question_text: string;
+  question_id?: number;
+  question?: {
+    question_number: number;
+    question_text: string;
+    question_type: 'A' | 'B' | 'C';
+  };
   answer_text?: string;
   answer_numeric?: number;
-  answer_json?: any;
-  question_type: 'A' | 'B' | 'C';
+  answer_json?: Record<string, unknown> | null;
 }
 
 export default function Responses() {
@@ -57,7 +60,18 @@ export default function Responses() {
   }, []);
 
   useEffect(() => {
-    filterResponses();
+    // Inline filtering to avoid missing dependency on filterResponses
+    let filtered = responses;
+    if (searchTerm) {
+      filtered = filtered.filter(
+        response =>
+          response.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          response.answers.some(answer =>
+            (answer.answer_text || '').toLowerCase().includes(searchTerm.toLowerCase())
+          )
+      );
+    }
+    setFilteredResponses(filtered);
   }, [responses, searchTerm]);
 
   const fetchSurveysAndResponses = async () => {
@@ -70,26 +84,14 @@ export default function Responses() {
       ]);
       setSurveys(surveysRes.data);
       setResponses(responsesRes.data);
-    } catch (error: any) {
+    } catch {
       setError("Erreur lors du chargement des réponses ou des sondages.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const filterResponses = () => {
-    let filtered = responses;
-    if (searchTerm) {
-      filtered = filtered.filter(
-        response =>
-          response.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          response.answers.some(answer =>
-            (answer.answer_text || '').toLowerCase().includes(searchTerm.toLowerCase())
-          )
-      );
-    }
-    setFilteredResponses(filtered);
-  };
+  // filtering is handled inline in useEffect
 
   if (isLoading) {
     return (
@@ -168,11 +170,11 @@ export default function Responses() {
                 <AccordionItem 
                   key={response.id} 
                   value={`response-${response.id}`}
-                  className="border border-slate-200 dark:border-slate-700 rounded-lg px-4"
+                  className="border border-slate-200 rounded-lg "
                 >
-                  <AccordionTrigger className="hover:no-underline">
+                  <AccordionTrigger className="hover:no-underline bg-white w-full">
                     <div className="flex items-center justify-between w-full pr-4">
-                      <div className="flex items-center space-x-4">
+                      <div className="flex items-center  space-x-4">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600">
                           <span className="text-sm font-medium text-white">
                             {survey ? survey.title[0] : '?'}
@@ -211,25 +213,25 @@ export default function Responses() {
                         <TableBody>
                           {response.answers.map((answer, idx) => (
                             <TableRow key={idx}>
-                              <TableCell className="font-medium">
-                                #{answer.question_number}
+                              <TableCell className="font-medium text-center">
+                                #{answer.question?.question_number ?? idx + 1}
                               </TableCell>
                               <TableCell className="text-slate-700 dark:text-slate-300">
-                                {answer.question_text}
+                                {answer.question?.question_text ?? '-'}
                               </TableCell>
                               <TableCell className="text-slate-900 dark:text-slate-100 font-medium">
-                                {answer.answer_text ?? answer.answer_numeric ?? JSON.stringify(answer.answer_json) ?? '-'}
+                                {answer.answer_text ?? answer.answer_numeric ?? (answer.answer_json ? JSON.stringify(answer.answer_json) : null) ?? '-'}
                               </TableCell>
-                              <TableCell>
+                              <TableCell className="text-center">
                                 <Badge 
                                   variant="secondary" 
                                   className={
-                                    answer.question_type === 'A' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' :
-                                    answer.question_type === 'B' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
+                                    answer.question?.question_type === 'A' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' :
+                                    answer.question?.question_type === 'B' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
                                     'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
                                   }
                                 >
-                                  {answer.question_type}
+                                  {answer.question?.question_type ?? '-'}
                                 </Badge>
                               </TableCell>
                             </TableRow>
