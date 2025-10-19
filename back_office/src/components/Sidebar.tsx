@@ -26,12 +26,17 @@ export default function Sidebar() {
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg group-hover:shadow-xl transition-shadow">
               <MonitorSpeaker className="h-6 w-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent">
-                Bigscreen
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Admin Panel</p>
-            </div>
+<div className="flex flex-col items-center">
+  <img
+    src="/images/bigscreen_logo.svg"
+    alt="Bigscreen Logo"
+    className="mx-auto mt-2 w-28 sm:w-32 md:w-36 h-auto py-2 brightness-0 object-contain"
+  />
+  <p className="text-sm text-slate-600 dark:text-slate-400">
+    Admin Panel
+  </p>
+</div>
+
           </Link>
         </div>
 

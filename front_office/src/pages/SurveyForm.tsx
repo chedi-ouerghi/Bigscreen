@@ -131,16 +131,43 @@ const SurveyForm: React.FC = () => {
 
       const payload: { answers: AnswerPayload[]; email?: string } = { answers };
       // Determine respondent email: prefer a question that asks for email
-      const emailQuestion = questions.find((q) => q.validation_rules?.email);
-      let email = emailQuestion
-        ? (responses[emailQuestion.id] as string)
-        : undefined;
+      const emailQuestion = questions.find((q) => {
+        const vr = q.validation_rules as any;
+        const emailFlag =
+          vr &&
+          (vr.email === true ||
+            vr.email === "true" ||
+            vr.email === 1 ||
+            vr.email === "1");
+        const text = (q.question_text || "").toLowerCase();
+        const textSuggests =
+          text.includes("email") || text.includes("e-mail") || text.includes("adresse");
+        return emailFlag || textSuggests;
+      });
+      let email: string | undefined;
 
-      // If no email was provided via a question, prompt the user once.
-      if (!email) {
-        const prompted = window.prompt(
-          "Veuillez entrer votre adresse e-mail (requis) :"
-        );
+      if (emailQuestion) {
+        // Use the response from the email question if present and valid.
+        const candidate = (responses[emailQuestion.id] as string | undefined)?.trim();
+        if (!candidate) {
+          toast({
+            title: "Email requis",
+            description:
+              "Le sondage contient un champ email. Veuillez revenir à la question email et renseigner votre adresse avant de soumettre.",
+          });
+          return;
+        }
+        if (!validateEmail(candidate)) {
+          toast({
+            title: "Email invalide",
+            description: "L'email renseigné dans la question est invalide. Veuillez le corriger avant de soumettre.",
+          });
+          return;
+        }
+        email = candidate;
+      } else {
+        // Only prompt if no email question exists in the survey
+        const prompted = window.prompt("Veuillez entrer votre adresse e-mail (requis) :");
         if (!prompted) {
           toast({
             title: "Email requis",
@@ -148,14 +175,14 @@ const SurveyForm: React.FC = () => {
           });
           return;
         }
-        if (!validateEmail(prompted)) {
+        if (!validateEmail(prompted.trim())) {
           toast({
             title: "Email invalide",
             description: "Veuillez fournir une adresse e-mail valide.",
           });
           return;
         }
-        email = prompted;
+        email = prompted.trim();
       }
 
       // include email in payload
